@@ -49,6 +49,7 @@ import androidx.compose.ui.unit.dp
 import com.example.tiptime.ui.theme.TipTimeTheme
 import java.text.NumberFormat
 import androidx.annotation.StringRes
+import androidx.compose.ui.text.input.ImeAction
 
 class MainActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -92,16 +93,26 @@ fun TipTimeLayout() {
             onValueChanged = { amountInput = it },
             modifier = Modifier
                 .padding(bottom = 32.dp)
-                .fillMaxWidth()
+                .fillMaxWidth(),
+            keyboardOptions = KeyboardOptions.Default.copy(
+                keyboardType = KeyboardType.Number,
+                imeAction = ImeAction.Next
+            )
         )
+
         EditNumberField(
             label = R.string.how_was_the_service,
             value = tipInput,
             onValueChanged = { tipInput = it },
             modifier = Modifier
                 .padding(bottom = 32.dp)
-                .fillMaxWidth()
+                .fillMaxWidth(),
+            keyboardOptions = KeyboardOptions.Default.copy(
+                keyboardType = KeyboardType.Number,
+                imeAction = ImeAction.Done
+            )
         )
+
         Text(
             text = stringResource(R.string.tip_amount, tip),
             style = MaterialTheme.typography.displaySmall
@@ -115,7 +126,11 @@ fun EditNumberField(
     @StringRes label: Int,
     value: String,
     onValueChanged: (String) -> Unit,
-    modifier: Modifier = Modifier
+    modifier: Modifier = Modifier,
+    keyboardOptions: KeyboardOptions = KeyboardOptions.Default.copy( // 👈 valor por defecto
+        keyboardType = KeyboardType.Number,
+        imeAction = ImeAction.Next
+    )
 ) {
     TextField(
         value = value,
@@ -123,9 +138,10 @@ fun EditNumberField(
         modifier = modifier,
         onValueChange = onValueChanged,
         label = { Text(stringResource(label)) },
-        keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Number)
+        keyboardOptions = keyboardOptions
     )
 }
+
 
 /**
  * Calculates the tip based on the user input and format the tip amount
